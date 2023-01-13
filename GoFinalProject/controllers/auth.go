@@ -3,8 +3,6 @@ package controllers
 import (
 	"net/http"
 
-	"github.com/HiteshKumarMeghwar/GoFinalProjec/MyModule/database"
-
 	"github.com/gorilla/sessions"
 )
 
@@ -13,8 +11,7 @@ var store = sessions.NewCookieStore([]byte("super-secret"))
 func Auth(tpl Template) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		/* Requiring Database */
-		db := database.Connect()
-		defer db.Close()
+		// db := database.Connect()
 
 		/* if r.URL.Path == "/" {
 			session, _ := store.Get(r, "session")

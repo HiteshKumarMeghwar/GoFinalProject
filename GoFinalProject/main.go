@@ -1,31 +1,23 @@
 package main
 
 import (
-	"fmt"
-	"net/http"
-	"path/filepath"
-
-	"github.com/HiteshKumarMeghwar/GoFinalProjec/MyModule/controllers"
 	"github.com/HiteshKumarMeghwar/GoFinalProjec/MyModule/database"
-	"github.com/HiteshKumarMeghwar/GoFinalProjec/MyModule/views"
-
-	"github.com/go-chi/chi/v5"
+	"github.com/HiteshKumarMeghwar/GoFinalProjec/MyModule/routes"
+	"github.com/gofiber/fiber/v2"
+	"github.com/gofiber/fiber/v2/middleware/cors"
 )
 
 func main() {
+
+	/* Requiring Database Env Variables */
 	database.LoadEnvVariables()
-	/* Requiring Database */
-	db := database.Connect()
-	defer db.Close()
+	database.Connect()
+	app := fiber.New()
+	// this is really important ....
+	app.Use(cors.New(cors.Config{
+		AllowCredentials: true,
+	}))
+	routes.Setup(app)
 
-	route := chi.NewRouter()
-
-	route.Get("/", controllers.Auth(views.Must(views.Parse(filepath.Join("templates", "dashboard.gohtml")))))
-
-	route.NotFound(func(w http.ResponseWriter, r *http.Request) {
-		http.Error(w, "Page Not Found...!", http.StatusNotFound)
-	})
-
-	fmt.Println("Stating the server on :8080 port ... !")
-	http.ListenAndServe(":8080", route)
+	app.Listen(":8080")
 }
