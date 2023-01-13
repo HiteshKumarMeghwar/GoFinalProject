@@ -1,7 +1,6 @@
 package controllers
 
 import (
-	"fmt"
 	"net/http"
 
 	"github.com/HiteshKumarMeghwar/GoFinalProjec/MyModule/database"
@@ -17,7 +16,7 @@ func Auth(tpl Template) http.HandlerFunc {
 		db := database.Connect()
 		defer db.Close()
 
-		if r.URL.Path == "/" {
+		/* if r.URL.Path == "/" {
 			session, _ := store.Get(r, "session")
 			id, ok := session.Values["userId"]
 			fmt.Println("ok: ", ok)
@@ -26,7 +25,7 @@ func Auth(tpl Template) http.HandlerFunc {
 				return
 			}
 			fmt.Println(id)
-		}
+		} */
 		tpl.Execute(w, nil)
 	}
 }

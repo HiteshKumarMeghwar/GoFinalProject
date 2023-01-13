@@ -5,6 +5,7 @@ go 1.19
 require golang.org/x/crypto v0.5.0
 
 require (
+	github.com/go-chi/chi/v5 v5.0.8
 	github.com/gorilla/sessions v1.2.1
 	github.com/jackc/pgx/v5 v5.2.0
 	github.com/joho/godotenv v1.4.0
