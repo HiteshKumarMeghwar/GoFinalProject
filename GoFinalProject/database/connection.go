@@ -2,6 +2,7 @@ package database
 
 import (
 	"fmt"
+	"log"
 	"os"
 
 	"github.com/HiteshKumarMeghwar/GoFinalProjec/MyModule/models"
@@ -40,8 +41,9 @@ func Connect() {
 	connection, err := gorm.Open(postgres.Open(cfg.String()), &gorm.Config{})
 	if err != nil {
 		panic(err)
+	} else {
+		log.Println("Database Successfully Connected....!")
 	}
 	DB = connection
 	connection.AutoMigrate(&models.User{})
-	return
 }
