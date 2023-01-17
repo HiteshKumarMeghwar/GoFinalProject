@@ -1,30 +1,70 @@
 package controllers
 
 import (
+	"regexp"
 	"strconv"
+	"strings"
 	"time"
 
 	"github.com/HiteshKumarMeghwar/GoFinalProjec/MyModule/bcryptPassword"
 	"github.com/HiteshKumarMeghwar/GoFinalProjec/MyModule/database"
 	"github.com/HiteshKumarMeghwar/GoFinalProjec/MyModule/models"
+	"github.com/HiteshKumarMeghwar/GoFinalProjec/MyModule/util"
 	"github.com/dgrijalva/jwt-go/v4"
 	"github.com/gofiber/fiber/v2"
 )
 
+func validateEmail(email string) bool {
+	Re := regexp.MustCompile(`[a-z0-9._%+\-]+@[a-z0-9._%+\-]+\.[a-z0-9._%+\-]`)
+	return Re.MatchString(email)
+}
+
 func Register(c *fiber.Ctx) error {
 	var data map[string]string
+	var userData models.User
 	if err := c.BodyParser(&data); err != nil {
 		return err
 	}
+
+	// Check if password is less than 6 characters .......
+	if len(data["password"]) <= 6 {
+		c.Status(400)
+		return c.JSON(fiber.Map{
+			"message": "Password must be greater than 6 characters",
+		})
+	}
+
+	// Validating Email Address .......
+	if !validateEmail(strings.TrimSpace(data["email"])) {
+		c.Status(400)
+		return c.JSON(fiber.Map{
+			"message": "Invalid Email Address",
+		})
+	}
+
+	// Check if email already exist in database ........
+	database.DB.Where("email = ?", strings.TrimSpace(data["email"])).First(&userData)
+	if userData.Id != 0 {
+		c.Status(400)
+		return c.JSON(fiber.Map{
+			"message": "Email already exist",
+		})
+	}
+
 	pass, _ := bcryptPassword.HashPassword(data["password"])
 	user := models.User{
-		Name:     data["name"],
-		Email:    data["email"],
-		Password: pass,
-		RoleId:   3,
+		FirstName: data["first_name"],
+		LastName:  data["last_name"],
+		Email:     strings.TrimSpace(data["email"]),
+		Password:  pass,
+		Phone:     data["phone"],
 	}
 	database.DB.Create(&user)
-	return c.JSON(user)
+	c.Status(200)
+	return c.JSON(fiber.Map{
+		"message": "Account has been created successfully ...!",
+		"user":    user,
+	})
 }
 
 func Login(c *fiber.Ctx) error {
@@ -39,7 +79,7 @@ func Login(c *fiber.Ctx) error {
 	if user.Id == 0 {
 		c.Status(fiber.StatusNotFound)
 		return c.JSON(fiber.Map{
-			"message": "User not found ... !",
+			"message": "Email Address doesn't exist, Kindly  create an account ... !",
 		})
 	}
 
@@ -51,18 +91,12 @@ func Login(c *fiber.Ctx) error {
 		})
 	}
 
-	claims := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.StandardClaims{
-		Issuer: strconv.Itoa(int(user.Id)),
-		// ExpiresAt: time.Now().Add(time.Hour * 24).Unix(),
-	})
-
-	token, err := claims.SignedString([]byte("secret"))
+	token, err := util.GenerateJwt(strconv.Itoa(int(user.Id)))
 	if err != nil {
 		c.Status(fiber.StatusInternalServerError)
-		return c.JSON(fiber.Map{
-			"message": "Could not Login",
-		})
+		return nil
 	}
+
 	cookie := fiber.Cookie{
 		Name:     "jwt",
 		Value:    token,
@@ -71,8 +105,13 @@ func Login(c *fiber.Ctx) error {
 	}
 	c.Cookie(&cookie)
 	return c.JSON(fiber.Map{
-		"message": "success",
+		"message": "you have successfully login",
+		"user":    user,
 	})
+}
+
+type Claims struct {
+	jwt.StandardClaims
 }
 
 func User(c *fiber.Ctx) error {

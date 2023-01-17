@@ -1,17 +1,27 @@
 {
     "cSpell.words": [
+        "allpost",
+        "blogpost",
         "dbname",
+        "deletepost",
         "dgrijalva",
+        "foreignkey",
+        "getblog",
         "godotenv",
         "gofiber",
         "gohtml",
         "gorm",
         "Ltpl",
         "Meghwar",
+        "Opps",
         "pressly",
         "Projec",
         "signin",
         "sslmode",
-        "SSMODE"
+        "SSMODE",
+        "uniquepost",
+        "updatepost",
+        "updoads",
+        "userid"
     ]
 }

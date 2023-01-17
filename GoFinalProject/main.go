@@ -4,7 +4,6 @@ import (
 	"github.com/HiteshKumarMeghwar/GoFinalProjec/MyModule/database"
 	"github.com/HiteshKumarMeghwar/GoFinalProjec/MyModule/routes"
 	"github.com/gofiber/fiber/v2"
-	"github.com/gofiber/fiber/v2/middleware/cors"
 )
 
 func main() {
@@ -14,9 +13,9 @@ func main() {
 	database.Connect()
 	app := fiber.New()
 	// this is really important ....
-	app.Use(cors.New(cors.Config{
+	/* app.Use(cors.New(cors.Config{
 		AllowCredentials: true,
-	}))
+	})) */
 	routes.Setup(app)
 
 	app.Listen(":8080")
