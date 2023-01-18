@@ -1,6 +1,36 @@
-import React, {useState, SyntheticEvent} from 'react'
+import React, {useEffect, useState} from 'react'
+import {useForm} from 'react-hook-form'
+import axios from 'axios'
+import { Link, useNavigate } from 'react-router-dom'
 
 function Register() {
+
+  const [message, setMessage] = useState();
+  const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
+  const {
+    register,
+    handleSubmit,
+    watch,
+    formState: {errors},
+  } = useForm();
+  const options = {
+    position: "bottom-right",
+    style: {
+      backgroundColor: "gray",
+      border: "2px solid lightgreen",
+      color: "white",
+      fontFamily: "Menlo, monospace",
+      fontSize: "20px",
+      textAlign: "center",
+    },
+    closeStyle: {
+      color: "lightcoral",
+      fontSize: "16px",
+    },
+  };
+
+  
 
   return (
     <div className="relative flex flex-col justify-center min-h-screen overflow-hidden">
