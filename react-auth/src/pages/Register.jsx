@@ -1,6 +1,7 @@
 import React, {useEffect, useState} from 'react'
 import {useForm} from 'react-hook-form'
 import axios from 'axios'
+import {useSnackbar} from 'react-simple-snackbar'
 import { Link, useNavigate } from 'react-router-dom'
 
 function Register() {
@@ -30,7 +31,31 @@ function Register() {
     },
   };
 
-  
+  const [openSnackbar] = useSnackbar(options);
+  const onSubmit = (data) => {
+    setLoading(true);
+    const body = {
+      ...data,
+    }
+    axios.post(`http://localhost:8080/api/register`, { ...body}).then(function(response) {
+      // handle access .....
+      setLoading(false);
+      setMessage(response?.data?.message);
+      openSnackbar(response?.data?.message);
+      localStorage.setItem("user", JSON.stringify(response?.data?.user));
+      // console.log(response?.data?.user);
+      navigate("/login");
+    }).catch(function(error) {
+      // handle error
+      setLoading(false);
+      setMessage(error?.response?.data?.message);
+      openSnackbar(error?.response?.data?.message);
+      // console.log(error?.response?.data?.message);
+    }).then(function() {
+      //  always executed ....
+    });
+    // console.log(data);
+  };
 
   return (
     <div className="relative flex flex-col justify-center min-h-screen overflow-hidden">
@@ -38,7 +63,14 @@ function Register() {
                 <h1 className="text-3xl font-semibold text-center text-purple-700 underline">
                   Sign Up
                 </h1>
-                <form className="mt-6">
+                {message && (
+                  <div className='px-11 py-4'>
+                    <div className='font-bold bg-gradient-to-r from-fuchsia-400 via-sky-400 to-violet-200 p-4 text-black'>
+                      {message}
+                    </div>
+                  </div>
+                )}
+                <form className="mt-6" onSubmit={handleSubmit(onSubmit)}>
                     <div className="mb-2">
                         <label
                             // for="email"
@@ -48,10 +80,23 @@ function Register() {
                         </label>
                         <input
                             type="text"
-                            name='first_name'
-                            id='first_name'
+                            name="first_name"
+                            autoComplete='on'
                             className="block w-full px-4 py-2 mt-2 text-purple-700 bg-white border rounded-md focus:border-purple-400 focus:ring-purple-300 focus:outline-none focus:ring focus:ring-opacity-40"
+                            {...register("first_name", {
+                              required: true,
+                            })}
                         />
+                        <div>
+                          {errors.first_name && errors.first_name.type === "required" && (
+                            <span
+                              role="alert"
+                              className="text-red-600 text-[10px] italic"
+                            >
+                              First Name is required
+                            </span>
+                          )}
+                        </div>
                     </div>
                     <div className="mb-2">
                         <label
@@ -63,9 +108,22 @@ function Register() {
                         <input
                             type="text"
                             name='last_name'
-                            id='last_name'
+                            autoComplete='on'
                             className="block w-full px-4 py-2 mt-2 text-purple-700 bg-white border rounded-md focus:border-purple-400 focus:ring-purple-300 focus:outline-none focus:ring focus:ring-opacity-40"
+                            {...register("last_name", {
+                              required: true,
+                            })}
                         />
+                        <div>
+                          {errors.last_name && errors.last_name.type === "required" && (
+                            <span
+                              role="alert"
+                              className="text-red-600 text-[10px] italic"
+                            >
+                              Last Name is required
+                            </span>
+                          )}
+                        </div>
                     </div>
                     <div className="mb-2">
                         <label
@@ -77,9 +135,22 @@ function Register() {
                         <input
                             type="email"
                             name='email'
-                            id='email'
+                            autoComplete='on'
                             className="block w-full px-4 py-2 mt-2 text-purple-700 bg-white border rounded-md focus:border-purple-400 focus:ring-purple-300 focus:outline-none focus:ring focus:ring-opacity-40"
+                            {...register("email", {
+                              required: true,
+                            })}
                         />
+                        <div>
+                          {errors.email && errors.email.type === "required" && (
+                            <span
+                              role="alert"
+                              className="text-red-600 text-[10px] italic"
+                            >
+                              Email is required
+                            </span>
+                          )}
+                        </div>
                     </div>
                     <div className="mb-2">
                         <label
@@ -91,9 +162,22 @@ function Register() {
                         <input
                             type="password"
                             name='password'
-                            id='password'
+                            autoComplete='on'
                             className="block w-full px-4 py-2 mt-2 text-purple-700 bg-white border rounded-md focus:border-purple-400 focus:ring-purple-300 focus:outline-none focus:ring focus:ring-opacity-40"
+                            {...register("password", {
+                              required: true,
+                            })}
                         />
+                        <div>
+                          {errors.password && errors.password.type === "required" && (
+                            <span
+                              role="alert"
+                              className="text-red-600 text-[10px] italic"
+                            >
+                              Password is required
+                            </span>
+                          )}
+                        </div>
                     </div>
                     <div className="mb-2">
                         <label
@@ -105,9 +189,22 @@ function Register() {
                         <input
                             type="number"
                             name='phone'
-                            id='phone'
+                            autoComplete='on'
                             className="block w-full px-4 py-2 mt-2 text-purple-700 bg-white border rounded-md focus:border-purple-400 focus:ring-purple-300 focus:outline-none focus:ring focus:ring-opacity-40"
+                            {...register("phone", {
+                              required: true,
+                            })}
                         />
+                        <div>
+                          {errors.phone && errors.phone.type === "required" && (
+                            <span
+                              role="alert"
+                              className="text-red-600 text-[10px] italic"
+                            >
+                              Phone is required
+                            </span>
+                          )}
+                        </div>
                     </div>
                     <a
                         href="#"
@@ -116,8 +213,12 @@ function Register() {
                         Forget Password?
                     </a>
                     <div className="mt-6">
-                        <button className="w-full px-4 py-2 tracking-wide text-white transition-colors duration-200 transform bg-purple-700 rounded-md hover:bg-purple-600 focus:outline-none focus:bg-purple-600">
-                            Register
+                        <button className={`w-full ${
+                          loading ? "bg-gray-500" : "bg-blue-500 hover:bg-blue-700"
+                          } text-white font-bold py-2 px-4 rounded`}
+                          disabled={loading ? true : false}
+                        >
+                          {loading ? "Loading...":"Sign Up"}
                         </button>
                     </div>
                 </form>
@@ -125,12 +226,12 @@ function Register() {
                 <p className="mt-8 text-xs font-light text-center text-gray-700">
                     {" "}
                     Already have account?{" "}
-                    <a
-                        href="/login"
+                    <Link
+                        to="/login"
                         className="font-medium text-purple-600 hover:underline"
                     >
-                        Sign In
-                    </a>
+                      Sign In
+                    </Link>
                 </p>
             </div>
         </div>
