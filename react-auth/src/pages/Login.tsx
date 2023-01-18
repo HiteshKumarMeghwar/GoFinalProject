@@ -5,7 +5,7 @@ export default function Login() {
         <div className="relative flex flex-col justify-center min-h-screen overflow-hidden">
             <div className="w-full p-6 m-auto bg-white rounded-md shadow-md lg:max-w-xl">
                 <h1 className="text-3xl font-semibold text-center text-purple-700 underline">
-                   Sign in
+                Sign in
                 </h1>
                 <form className="mt-6">
                     <div className="mb-2">
@@ -49,7 +49,7 @@ export default function Login() {
                     {" "}
                     Don't have an account?{" "}
                     <a
-                        href="#"
+                        href="/register"
                         className="font-medium text-purple-600 hover:underline"
                     >
                         Sign up
