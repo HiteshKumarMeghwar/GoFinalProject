@@ -33,5 +33,6 @@ require (
 	github.com/jackc/pgx/v5 v5.2.0 // indirect
 	github.com/jinzhu/inflection v1.0.0 // indirect
 	github.com/jinzhu/now v1.1.5 // indirect
+	github.com/stretchr/testify v1.8.1 // indirect
 	golang.org/x/text v0.6.0 // indirect
 )
