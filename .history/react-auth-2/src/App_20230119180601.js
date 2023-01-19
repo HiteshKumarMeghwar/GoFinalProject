@@ -15,9 +15,9 @@ function App() {
         <main className="form-signin">
           <Routes>
             <Route exact path='/' element={<Home />} />
-            <Route path='/login' element={<Login />} />
-            <Route path='/register' element={<Register />} />
-            <Route path='/personal_posts' element={<PersonalBlog />} />
+            <Route exact path='/login' element={<Login />} />
+            <Route exact path='/register' element={<Register />} />
+            <Route exact path='/personal_posts' element={<PersonalBlog />} />
           </Routes>
         </main>
       </BrowserRouter>
