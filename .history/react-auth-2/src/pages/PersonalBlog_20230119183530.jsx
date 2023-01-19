@@ -1,13 +1,13 @@
 import React, {useState, useEffect} from "react";
 import axios from 'axios'
 // import {useSnackbar} from 'react-simple-snackbar'
-import { useNavigate } from 'react-router-dom'
+// import { useNavigate } from 'react-router-dom'
 
 export default function PersonalBlog() {
     const [blogData, setBlogData] = useState();
     const [loading, setLoading] = useState(false);
     // const [deleteLoading, setDeleteLoading] = useState(false);
-    const navigate = useNavigate();
+    // const navigate = useNavigate();
 
     /* const options = {
         position: "bottom-right",
@@ -44,12 +44,12 @@ export default function PersonalBlog() {
     }
 
     useEffect(() => {
-        const User = localStorage.getItem("user");
+        /* const User = localStorage.getItem("user");
         if(!User){
             navigate("/login")
-        }
+        } */
         uniqueBlog();
-    }, [navigate]);
+    }, []);
 
     /* const deleteBtn = (blog) => {
         setDeleteLoading(true);

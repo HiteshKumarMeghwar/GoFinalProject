@@ -49,7 +49,7 @@ export default function PersonalBlog() {
             navigate("/login")
         }
         uniqueBlog();
-    }, [navigate]);
+    }, []);
 
     /* const deleteBtn = (blog) => {
         setDeleteLoading(true);

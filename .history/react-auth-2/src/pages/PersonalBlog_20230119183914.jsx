@@ -7,7 +7,6 @@ export default function PersonalBlog() {
     const [blogData, setBlogData] = useState();
     const [loading, setLoading] = useState(false);
     // const [deleteLoading, setDeleteLoading] = useState(false);
-    const navigate = useNavigate();
 
     /* const options = {
         position: "bottom-right",
@@ -26,30 +25,30 @@ export default function PersonalBlog() {
     }; */
     // const [openSnackbar] = useSnackbar(options);
 
-    const uniqueBlog = () => {
-        setLoading(true);
-        axios.get(`http://127.0.0.1:8080/api/uniquepost`, 
-        {withCredentials: true, headers: {Authorization: "TOKEN"}
-        }).then(function(response) {
-            // handle access .....
-            setLoading(false);
-            setBlogData(response?.data)
-            // console.log(response?.data)
-        }).catch(function(error) {
-            // handle error
-            setLoading(false);
-        }).then(function() {
-            //  always executed ....
-        });
-    }
-
     useEffect(() => {
+        const navigate = useNavigate();
+        const uniqueBlog = () => {
+            setLoading(true);
+            axios.get(`http://127.0.0.1:8080/api/uniquepost`, 
+            {withCredentials: true, headers: {Authorization: "TOKEN"}
+            }).then(function(response) {
+                // handle access .....
+                setLoading(false);
+                setBlogData(response?.data)
+                // console.log(response?.data)
+            }).catch(function(error) {
+                // handle error
+                setLoading(false);
+            }).then(function() {
+                //  always executed ....
+            });
+        };
         const User = localStorage.getItem("user");
         if(!User){
             navigate("/login")
         }
         uniqueBlog();
-    }, [navigate]);
+    }, []);
 
     /* const deleteBtn = (blog) => {
         setDeleteLoading(true);

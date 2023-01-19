@@ -14,9 +14,13 @@ func main() {
 	database.Connect()
 	app := fiber.New()
 	// this is really important ....
+	/* app.Use(cors.New(cors.Config{
+		AllowCredentials: true,
+	})) */
+
 	app.Use(cors.New(cors.Config{
 		AllowHeaders:     "Origin,Content-Type,Accept,Content-Length,Accept-Language,Accept-Encoding,Connection,Access-Control-Allow-Origin",
-		AllowOrigins:     "*",
+		AllowOrigins:     "http://localhost:8080/",
 		AllowCredentials: true,
 		AllowMethods:     "GET,POST,HEAD,PUT,DELETE,PATCH,OPTIONS",
 	}))

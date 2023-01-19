@@ -29,7 +29,7 @@ export default function PersonalBlog() {
     const uniqueBlog = () => {
         setLoading(true);
         axios.get(`http://127.0.0.1:8080/api/uniquepost`, 
-        {withCredentials: true, headers: {Authorization: "TOKEN"}
+        {withCredentials: true, headers: {Authorization: "jwt"}
         }).then(function(response) {
             // handle access .....
             setLoading(false);
@@ -49,7 +49,7 @@ export default function PersonalBlog() {
             navigate("/login")
         }
         uniqueBlog();
-    }, [navigate]);
+    }, []);
 
     /* const deleteBtn = (blog) => {
         setDeleteLoading(true);
