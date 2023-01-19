@@ -28,10 +28,10 @@ function Home() {
             </p>
             <div className='mt-5 sm:mt-8 sm:flex justify-center'>
               <div className='rounded-md shadow'>
-                <a href="/create_post" className='w-full flex items-center justify-center px-8 py-3 border border-transparent rounded bg-indigo-600'>Create Post</a>
+                <a href="/create_post" className='w-full flex items-center justify-center px-8 py-3 border border-transparent rounded-full bg-indigo-600'>Create Post</a>
               </div>
               <div className='mt-3 sm:mt-0 sm:ml-3'>
-                <a href="/personal" className='w-full flex items-center justify-center px-8 py-3 border border-transparent rounded bg-indigo-50 '>View My Post</a>
+                <a href="/personal" className='w-full flex items-center justify-center px-8 py-3 border border-transparent rounded-full bg-indigo-50 '>View My Post</a>
               </div>
             </div>
           </div>

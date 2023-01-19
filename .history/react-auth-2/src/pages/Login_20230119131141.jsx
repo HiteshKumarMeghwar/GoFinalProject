@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React from 'react';
 import {useForm} from 'react-hook-form'
 import axios from 'axios'
 // import {useSnackbar} from 'react-simple-snackbar'
@@ -10,7 +10,7 @@ export default function Login() {
     const [loading, setLoading] = useState(false);
     const navigate = useNavigate();
     const {
-        register,
+        login,
         handleSubmit,
         // watch,
         formState: {errors},
@@ -64,14 +64,7 @@ export default function Login() {
                 <h1 className="text-3xl font-semibold text-center text-purple-700 underline">
                 Sign in
                 </h1>
-                {message && (
-                    <div className='px-11 py-4'>
-                        <div className='font-bold bg-gradient-to-r from-fuchsia-400 via-sky-400 to-violet-200 p-4 text-black'>
-                        {message}
-                        </div>
-                    </div>
-                )}
-                <form method='POST' className="mt-6" onSubmit={handleSubmit(onSubmit)}>
+                <form method='POST' className="mt-6">
                     <div className="mb-2">
                         <label
                             for="email"
@@ -85,7 +78,7 @@ export default function Login() {
                             id='email'
                             autoComplete='on'
                             className="block w-full px-4 py-2 mt-2 text-purple-700 bg-white border rounded-md focus:border-purple-400 focus:ring-purple-300 focus:outline-none focus:ring focus:ring-opacity-40"
-                            {...register("email", {
+                            {...login("email", {
                                 required: true,
                             })}
                         />
@@ -112,7 +105,7 @@ export default function Login() {
                             name='password'
                             autoComplete='on'
                             className="block w-full px-4 py-2 mt-2 text-purple-700 bg-white border rounded-md focus:border-purple-400 focus:ring-purple-300 focus:outline-none focus:ring focus:ring-opacity-40"
-                            {...register("password", {
+                            {...login("password", {
                                 required: true,
                             })}
                         />
@@ -134,12 +127,8 @@ export default function Login() {
                         Forget Password?
                     </a>
                     <div className="mt-6">
-                    <button className={`w-full ${
-                            loading ? "bg-gray-500" : "bg-blue-500 hover:bg-blue-700"
-                            } text-white font-bold py-2 px-4 rounded`}
-                            disabled={loading ? true : false}
-                            >
-                            {loading ? "Loading...":"Sign In"}
+                        <button className="w-full px-4 py-2 tracking-wide text-white transition-colors duration-200 transform bg-purple-700 rounded-md hover:bg-purple-600 focus:outline-none focus:bg-purple-600">
+                            Login
                         </button>
                     </div>
                 </form>

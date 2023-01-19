@@ -10,7 +10,7 @@ export default function Login() {
     const [loading, setLoading] = useState(false);
     const navigate = useNavigate();
     const {
-        register,
+        login,
         handleSubmit,
         // watch,
         formState: {errors},
@@ -85,7 +85,7 @@ export default function Login() {
                             id='email'
                             autoComplete='on'
                             className="block w-full px-4 py-2 mt-2 text-purple-700 bg-white border rounded-md focus:border-purple-400 focus:ring-purple-300 focus:outline-none focus:ring focus:ring-opacity-40"
-                            {...register("email", {
+                            {...login("email", {
                                 required: true,
                             })}
                         />
@@ -112,7 +112,7 @@ export default function Login() {
                             name='password'
                             autoComplete='on'
                             className="block w-full px-4 py-2 mt-2 text-purple-700 bg-white border rounded-md focus:border-purple-400 focus:ring-purple-300 focus:outline-none focus:ring focus:ring-opacity-40"
-                            {...register("password", {
+                            {...login("password", {
                                 required: true,
                             })}
                         />

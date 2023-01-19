@@ -10,7 +10,7 @@ export default function Login() {
     const [loading, setLoading] = useState(false);
     const navigate = useNavigate();
     const {
-        register,
+        login,
         handleSubmit,
         // watch,
         formState: {errors},
@@ -71,7 +71,7 @@ export default function Login() {
                         </div>
                     </div>
                 )}
-                <form method='POST' className="mt-6" onSubmit={handleSubmit(onSubmit)}>
+                <form method='POST' className="mt-6">
                     <div className="mb-2">
                         <label
                             for="email"
@@ -85,7 +85,7 @@ export default function Login() {
                             id='email'
                             autoComplete='on'
                             className="block w-full px-4 py-2 mt-2 text-purple-700 bg-white border rounded-md focus:border-purple-400 focus:ring-purple-300 focus:outline-none focus:ring focus:ring-opacity-40"
-                            {...register("email", {
+                            {...login("email", {
                                 required: true,
                             })}
                         />
@@ -112,7 +112,7 @@ export default function Login() {
                             name='password'
                             autoComplete='on'
                             className="block w-full px-4 py-2 mt-2 text-purple-700 bg-white border rounded-md focus:border-purple-400 focus:ring-purple-300 focus:outline-none focus:ring focus:ring-opacity-40"
-                            {...register("password", {
+                            {...login("password", {
                                 required: true,
                             })}
                         />
@@ -134,12 +134,8 @@ export default function Login() {
                         Forget Password?
                     </a>
                     <div className="mt-6">
-                    <button className={`w-full ${
-                            loading ? "bg-gray-500" : "bg-blue-500 hover:bg-blue-700"
-                            } text-white font-bold py-2 px-4 rounded`}
-                            disabled={loading ? true : false}
-                            >
-                            {loading ? "Loading...":"Sign In"}
+                        <button className="w-full px-4 py-2 tracking-wide text-white transition-colors duration-200 transform bg-purple-700 rounded-md hover:bg-purple-600 focus:outline-none focus:bg-purple-600">
+                            Login
                         </button>
                     </div>
                 </form>
