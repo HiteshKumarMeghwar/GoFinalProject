@@ -5,7 +5,6 @@ import Nav from './components/Nav';
 import Home from './pages/Home';
 import Login from './pages/Login';
 import Register from './pages/Register';
-import PersonalBlog from './pages/PersonalBlog';
 
 function App() {
   return (
@@ -17,7 +16,6 @@ function App() {
             <Route path='/' element={<Home />} />
             <Route path='/login' element={<Login />} />
             <Route path='/register' element={<Register />} />
-            <Route path='/personal_posts' element={<PersonalBlog />} />
           </Routes>
         </main>
       </BrowserRouter>
