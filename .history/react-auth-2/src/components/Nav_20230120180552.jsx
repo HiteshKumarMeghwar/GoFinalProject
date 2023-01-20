@@ -6,7 +6,7 @@ import { Link, useNavigate } from 'react-router-dom'
 function Nav() {
   const [userData, setUserData] = useState();
   const navigate = useNavigate();
-
+  
   useEffect(() => {
     const User = localStorage.getItem("user");
     const parseUser = JSON.parse(User);
@@ -17,7 +17,6 @@ function Nav() {
     axios.post(`http://127.0.0.1:8080/api/logout`, {withCredentials: true})
     .then(function(response) {
         // handle access .....
-        localStorage.removeItem("user")
         navigate("/login");
     }).catch(function(error) {
         // handle error
