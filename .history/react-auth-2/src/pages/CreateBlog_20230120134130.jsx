@@ -141,6 +141,27 @@ export default function () {
                 </div>
                 <div className='flex flex-wrap -mx-3 mb-6'>
                     <div className='w-full md:w-full px-3 mb-6 md:mb-0'>
+                        <label htmlFor="desc" className='block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2'>Description</label>
+                        <textarea
+                            className='appearance-none block w-full bg-gray-200 text-gray-700 border border-red-500 rounded'
+                            id='desc'
+                            placeholder='Description'
+                            name='desc'
+                            autoComplete='off'
+                            {...register("desc", {
+                                required: true,
+                            })}
+                            cols="30" rows="10"
+                        ></textarea>
+                        {errors.desc && errors.desc.type === "required" && (
+                            <p className='text-red-500 text-xs italic'>
+                                Please fill out this field
+                            </p>
+                        )}
+                    </div>
+                </div>
+                <div>
+                    <div>
                         <label title='click to select a picture'>
                             <input type="file" name="image" id="banner" 
                                 className='hidden'
@@ -149,10 +170,10 @@ export default function () {
                             />
                             <div className='flex flex-col'>
                                 <div className='pb-2'>Upload Image</div>
-                                {image ? (
+                                {image || singlePost ? (
                                     <div className='pt-4'>
                                         <img 
-                                            src={image ? image.image : ""} 
+                                            src={image ? image.image : singlePost?.image} 
                                             alt="Default Image" 
                                             className='object-contain -mt-8 p-5 w-1/2'
                                         />
@@ -169,46 +190,6 @@ export default function () {
                                 )}
                             </div>
                         </label>
-                    </div>
-                    <div className="flex items-center justify-center px-5">
-                        <button
-                            className="shadow bg-indigo-600 hover:bg-indigo-400 focus:shadow-outline focus:outline-none"
-                            onClick={uploadImage}
-                            disabled={loading ? true : false}
-                        >
-                            {loading ? "Loading ...":"Upload Image"}
-                        </button>
-                    </div>
-                </div>
-                <div className='flex flex-wrap -mx-3 mb-6'>
-                    <div className='w-full md:w-full px-3 mb-6 md:mb-0'>
-                        <label htmlFor="desc" className='block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2'>Description</label>
-                        <textarea
-                            className='appearance-none block w-full bg-gray-200 text-gray-700 border border-red-500 rounded'
-                            id='desc'
-                            placeholder='Description'
-                            name='desc'
-                            autoComplete='off'
-                            {...register("desc", {
-                                required: true,
-                            })}
-                            rows="10"
-                        ></textarea>
-                        {errors.desc && errors.desc.type === "required" && (
-                            <p className='text-red-500 text-xs italic'>
-                                Please fill out this field
-                            </p>
-                        )}
-                    </div>
-                </div>
-                <div className='flex flex-wrap -mx-3 mb-6'>
-                    <div className="flex items-center justify-center px-5">
-                        <button
-                            className="shadow bg-indigo-600 hover:bg-indigo-400 focus:shadow-outline focus:outline-none"
-                            disabled={loading ? true : false}
-                        >
-                            {loading ? "Loading ...":"Create Post"}
-                        </button>
                     </div>
                 </div>
             </form>

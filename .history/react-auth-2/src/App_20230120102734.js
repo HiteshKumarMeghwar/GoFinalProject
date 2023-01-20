@@ -7,8 +7,6 @@ import Login from './pages/Login';
 import Register from './pages/Register';
 import PersonalBlog from './pages/PersonalBlog';
 import CreateBlog from './pages/CreateBlog';
-import BlogDetail from './pages/BlogDetail';
-import EditPost from './pages/EditPost';
 
 function App() {
   return (
@@ -21,9 +19,7 @@ function App() {
             <Route path='/login' element={<Login />} />
             <Route path='/register' element={<Register />} />
             <Route path='/personal_posts' element={<PersonalBlog />} />
-            <Route path='/allpost/:id' element={<BlogDetail />} />
             <Route path='/create_post' element={<CreateBlog />} />
-            <Route path='/edit_post/:id' element={<EditPost />} />
           </Routes>
         </main>
       </BrowserRouter>

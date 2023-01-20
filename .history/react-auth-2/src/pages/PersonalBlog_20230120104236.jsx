@@ -1,7 +1,7 @@
 import React, {useState, useEffect} from "react";
 import axios from 'axios'
 // import {useSnackbar} from 'react-simple-snackbar'
-import { useNavigate, Link } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 
 export default function PersonalBlog() {
     const [blogData, setBlogData] = useState();
@@ -88,24 +88,24 @@ export default function PersonalBlog() {
                     {blogData?.map((blog) => (
                         <div className="my-1 px-1 w-full md:w-1/2 lg:my-4 lg:px-4 lg:w-1/3">
                             <article className="overflow-hidden rounded-lg shadow-lg">
-                                <Link to={`/allpost/${blog.id}`}>
+                                <a href={`/allpost/${blog.id}`}>
                                     <img src={blog?.image} alt="placeholder" className="block h-72 w-full" />
-                                </Link>
+                                </a>
                                 <header className="flex items-center justify-between leading-light p-2 md:p-4">
                                     <h1 className="text-lg">
-                                        <Link to={`/allpost/${blog.id}`} className="no-underline hover:underline text-black" >
+                                        <a href={`/allpost/${blog.id}`} className="no-underline hover:underline text-black" >
                                             {blog.title}
-                                        </Link>
+                                        </a>
                                     </h1>
                                     <p className="text-grey-darker text-sm">
                                         {new Date(blog?.CreatedAt).toLocaleString()}
                                     </p>
                                 </header>
                                 <footer className="flex items-center justify-between leading-light p-2 md:p-4">
-                                    <Link to={`/allpost/${blog.id}`} className="no-underline hover:underline text-black" >
+                                    <a href={`/allpost/${blog.id}`} className="no-underline hover:underline text-black" >
                                         <img src={blog?.image} alt="placeholder" className="block rounded-full h-5 w-5" />
                                         <p>{blog?.user?.first_name} {blog?.user?.last_name}</p>
-                                    </Link>
+                                    </a>
                                     <div>
                                         <button
                                             onClick={() => deleteBtn(blog)}
@@ -115,13 +115,13 @@ export default function PersonalBlog() {
                                         </button>
                                     </div>
                                     <div>
-                                        <Link to={`edit_post/${blog.id}`}>
+                                        <a href={`edit/${blog.id}`}>
                                             <button 
                                                 className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
                                             >
                                                 Edit
                                             </button>
-                                        </Link>
+                                        </a>
                                     </div>
                                 </footer>
                             </article>

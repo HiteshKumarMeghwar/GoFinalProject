@@ -139,8 +139,8 @@ export default function () {
                         )}
                     </div>
                 </div>
-                <div className='flex flex-wrap -mx-3 mb-6'>
-                    <div className='w-full md:w-full px-3 mb-6 md:mb-0'>
+                <div>
+                    <div>
                         <label title='click to select a picture'>
                             <input type="file" name="image" id="banner" 
                                 className='hidden'
@@ -199,16 +199,6 @@ export default function () {
                                 Please fill out this field
                             </p>
                         )}
-                    </div>
-                </div>
-                <div className='flex flex-wrap -mx-3 mb-6'>
-                    <div className="flex items-center justify-center px-5">
-                        <button
-                            className="shadow bg-indigo-600 hover:bg-indigo-400 focus:shadow-outline focus:outline-none"
-                            disabled={loading ? true : false}
-                        >
-                            {loading ? "Loading ...":"Create Post"}
-                        </button>
                     </div>
                 </div>
             </form>
