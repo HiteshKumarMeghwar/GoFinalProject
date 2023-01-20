@@ -5,10 +5,10 @@ import { useParams, useNavigate } from 'react-router-dom'
 
 function BlogDetail() {
     const [singlePost, setSinglePost] = useState();
-    const {id} = useParams();
     const navigate = useNavigate();
 
     useEffect(() => {
+        const {id} = useParams();
         const singleBlog = () => {
             axios.get(`http://127.0.0.1:8080/api/allpost/${id}`, {withCredentials: true})
             .then(function(response) {
@@ -28,7 +28,7 @@ function BlogDetail() {
             navigate("/login")
         }
         singleBlog();
-    }, [navigate, id]);
+    }, [navigate]);
 
     return (
         <div className='relative'>

@@ -28,7 +28,7 @@ function BlogDetail() {
             navigate("/login")
         }
         singleBlog();
-    }, [navigate, id]);
+    }, [navigate]);
 
     return (
         <div className='relative'>

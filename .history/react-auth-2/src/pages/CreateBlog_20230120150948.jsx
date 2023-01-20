@@ -1,21 +1,32 @@
-import React, {useState, useEffect} from 'react';
+import React, {useEffect, useState} from "react";
 import {useForm} from 'react-hook-form'
 import axios from 'axios'
 // import {useSnackbar} from 'react-simple-snackbar'
-import { useParams, useNavigate } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 
-function EditPost() {
-    const [singlePost, setSinglePost] = useState();
-    const [loading, setLoading] = useState(false);
-    const {id} = useParams();
-    const navigate = useNavigate();
+export default function CreateBlog () {
     const [image, setImage] = useState();
+    const [loading, setLoading] = useState(false);
+    const [imageData, setImageData] = useState();
+    const [imageUpload, setImageUpload] = useState();
+    const [userData, setUserData] = useState();
+    const [loadingData, setLoadingData] = useState();
+    const navigate = useNavigate();
     const {
         register,
         handleSubmit,
         // watch,
         formState: {errors},
     } = useForm();
+
+    useEffect(() => {
+        const User = localStorage.getItem("user");
+        const parseUser = JSON.parse(User);
+        setUserData(parseUser);
+        if (!User){
+            navigate("/login")
+        }
+    }, []);
 
     /* const options = {
         position: "bottom-right",
@@ -34,59 +45,62 @@ function EditPost() {
     }; */
     // const [openSnackbar] = useSnackbar(options);
 
-
-    useEffect(() => {
-        const singleBlog = () => {
-            axios.get(`http://127.0.0.1:8080/api/allpost/${id}`, {withCredentials: true})
-            .then(function(response) {
-                // handle access .....
-                setSinglePost(response?.data?.data);
-                console.log(response?.data?.data);
-            }).catch(function(error) {
-                // handle error
-                console.log(error);
-            }).then(function() {
-                //  always executed ....
-            });
-        };
-        const User = localStorage.getItem("user");
-        if(!User){
-            navigate("/login")
+    const onSubmit = (data) => {
+        setLoading(true);
+        const body = {
+            ...data,
+            image: imageData,
+            userid: userData.id,
+            // phone: parseInt(data.phone),
         }
-        singleBlog();
-    }, [navigate, id]);
+        // console.log(body);
+        // return
+        axios.post(`http://127.0.0.1:8080/api/createpost`, { ...body}, {withCredentials: true})
+        .then(function(response) {
+            // handle access .....
+            setLoading(false);
+            navigate("/personal_posts");
+        }).catch(function(error) {
+            // handle error
+            setLoading(false);
+        }).then(function() {
+            //  always executed ....
+        });
+    };
 
     const handleImage = (e) => {
         const file = e.target.files[0];
-        // const size = file.size / 1024;
+        const size = file.size / 1024;
+        setImageUpload(e.target.files[0]);
+
         // data.append("image", file)
         const reader = new FileReader();
         reader.onloadend = function() {
             setImage({ [e.target.name]: reader.result })
         };
-        if (file){
-            reader.readAsDataURL(file);
+        if (e.target.files[0]){
+            reader.readAsDataURL(e.target.files[0]);
             e.target.value = null;
         }
     };
 
-    const onSubmit = (data) => {
-        setLoading(true);
-        const body = {
-            ...data,
-            image: singlePost?.image,
-        }
-
-        axios.put(`http://127.0.0.1:8080/api/updatepost/${id}`, {...body}, {withCredentials: true})
-        .then(function(response) {
-            // handle access .....
-            // openSnackbar("Post Updated Successfully .. !");
-            setLoading(false);
-            navigate("/personal_posts");
-        }).catch(function(error) {
-            // handle error
-            // openSnackbar("Post Not Updated");
-            setLoading(false);
+    const uploadImage = () => {
+        let formData = new FormData(); // formData object
+        formData.append("image", imageUpload); // append the value with key, value pair
+        formData.append("name", imageUpload.name);
+        const config = {
+            headers: {"Content-Type":"multipart/form-data"},
+            withCredentials: true,
+        };
+        let url = `http://127.0.0.1:8080/api/upload-image/`;
+        axios.post(url, formData, config)
+        .then((response) => {
+            setLoadingData(false);
+            setImageData(response?.data?.url);
+            // openSnackbar("Image Uploaded Successfully");
+        })
+        .catch((error) => {
+            setLoadingData(false);
             console.log(error);
         });
     }
@@ -96,7 +110,7 @@ function EditPost() {
             <div className="max-w-screen-md mx-auto p-5">
                 <div className="text-center mb-16">
                     <p className="mt-4 text-sm leading-7 text-gray-500 font-regular uppercase">
-                        Edit your Post
+                        Create your Post
                     </p>
                     <h3 className="text-3xl sm:text-4xl leading-normal font-extrabold tracking-right text-gray-900">
                         Express your <span className="text-indigo-600">Feeling</span>
@@ -114,7 +128,6 @@ function EditPost() {
                             placeholder='Title'
                             name='title'
                             autoComplete='off'
-                            defaultValue={singlePost?.title}
                             {...register("title", {
                                 required: true,
                             })}
@@ -124,6 +137,47 @@ function EditPost() {
                                 Please fill out this field
                             </p>
                         )}
+                    </div>
+                </div>
+                <div className='flex flex-wrap -mx-3 mb-6'>
+                    <div className='w-full md:w-full px-3 mb-6 md:mb-0'>
+                        <label title='click to select a picture'>
+                            <input type="file" name="image" id="banner" 
+                                className='hidden'
+                                accept='image/*'
+                                visibility="hidden"
+                            />
+                            <div className='flex flex-col'>
+                                <div className='pb-2'>Upload Image</div>
+                                {image ? (
+                                    <div className='pt-4'>
+                                        <img 
+                                            src={image ? image.image : ""} 
+                                            alt="Default Image" 
+                                            className='object-contain -mt-8 p-5 w-1/2'
+                                        />
+                                    </div>
+                                ) : (
+                                    <div className='pt-4'>
+                                        <img 
+                                            src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRNaZWu6JFF7vxUdvIhvdG8RLQiMCI0RHUaitDRFpmj&s"
+                                            alt="Default Image" 
+                                            style={{background: "#EFEFEF"}}
+                                            className="h-full w-48"
+                                        />
+                                    </div>
+                                )}
+                            </div>
+                        </label>
+                    </div>
+                    <div className="flex items-center justify-center px-5">
+                        <button
+                            className="shadow bg-indigo-600 hover:bg-indigo-400 focus:shadow-outline focus:outline-none"
+                            onClick={uploadImage}
+                            disabled={loadingData ? true : false}
+                        >
+                            {loadingData ? "Loading ...":"Upload Image"}
+                        </button>
                     </div>
                 </div>
                 <div className='flex flex-wrap -mx-3 mb-6'>
@@ -139,45 +193,12 @@ function EditPost() {
                                 required: true,
                             })}
                             rows="10"
-                        >{singlePost?.desc}</textarea>
+                        ></textarea>
                         {errors.desc && errors.desc.type === "required" && (
                             <p className='text-red-500 text-xs italic'>
                                 Please fill out this field
                             </p>
                         )}
-                    </div>
-                </div>
-                <div>
-                    <div>
-                        <label title='click to select a picture'>
-                            <input type="file" name="image" id="banner" 
-                                className='hidden'
-                                accept='image/*'
-                                visibility="hidden"
-                                onChange={handleImage}
-                            />
-                            <div className='flex flex-col'>
-                                <div className='pb-2'>Upload Image</div>
-                                {image || singlePost ? (
-                                    <div className='pt-4'>
-                                        <img 
-                                            src={image ? image.image : singlePost?.image} 
-                                            alt="" 
-                                            className='object-contain -mt-8 p-5 w-1/2'
-                                        />
-                                    </div>
-                                ) : (
-                                    <div className='pt-4'>
-                                        <img 
-                                            src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRNaZWu6JFF7vxUdvIhvdG8RLQiMCI0RHUaitDRFpmj&s"
-                                            alt="" 
-                                            style={{background: "#EFEFEF"}}
-                                            className="h-full w-48"
-                                        />
-                                    </div>
-                                )}
-                            </div>
-                        </label>
                     </div>
                 </div>
                 <div className='flex flex-wrap -mx-3 mb-6'>
@@ -186,7 +207,7 @@ function EditPost() {
                             className="shadow bg-indigo-600 hover:bg-indigo-400 focus:shadow-outline focus:outline-none"
                             disabled={loading ? true : false}
                         >
-                            {loading ? "Loading ...":"Update Post"}
+                            {loading ? "Loading ...":"Create Post"}
                         </button>
                     </div>
                 </div>
@@ -194,5 +215,3 @@ function EditPost() {
         </div>
     )
 }
-
-export default EditPost

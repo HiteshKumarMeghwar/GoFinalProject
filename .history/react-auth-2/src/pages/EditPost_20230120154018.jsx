@@ -54,7 +54,7 @@ function EditPost() {
             navigate("/login")
         }
         singleBlog();
-    }, [navigate, id]);
+    }, [navigate]);
 
     const handleImage = (e) => {
         const file = e.target.files[0];
@@ -74,7 +74,7 @@ function EditPost() {
         setLoading(true);
         const body = {
             ...data,
-            image: singlePost?.image,
+            image: singleBlog?.image,
         }
 
         axios.put(`http://127.0.0.1:8080/api/updatepost/${id}`, {...body}, {withCredentials: true})

@@ -34,47 +34,33 @@ function EditPost() {
     }; */
     // const [openSnackbar] = useSnackbar(options);
 
+    const singleBlog = () => {
+        axios.get(`http://127.0.0.1:8080/api/allpost/${id}`, {withCredentials: true})
+        .then(function(response) {
+            // handle access .....
+            setSinglePost(response?.data?.data);
+            console.log(response?.data?.data);
+        }).catch(function(error) {
+            // handle error
+            console.log(error);
+        }).then(function() {
+            //  always executed ....
+        });
+    };
 
     useEffect(() => {
-        const singleBlog = () => {
-            axios.get(`http://127.0.0.1:8080/api/allpost/${id}`, {withCredentials: true})
-            .then(function(response) {
-                // handle access .....
-                setSinglePost(response?.data?.data);
-                console.log(response?.data?.data);
-            }).catch(function(error) {
-                // handle error
-                console.log(error);
-            }).then(function() {
-                //  always executed ....
-            });
-        };
         const User = localStorage.getItem("user");
         if(!User){
             navigate("/login")
         }
         singleBlog();
-    }, [navigate, id]);
-
-    const handleImage = (e) => {
-        const file = e.target.files[0];
-        // const size = file.size / 1024;
-        // data.append("image", file)
-        const reader = new FileReader();
-        reader.onloadend = function() {
-            setImage({ [e.target.name]: reader.result })
-        };
-        if (file){
-            reader.readAsDataURL(file);
-            e.target.value = null;
-        }
-    };
+    }, [navigate]);
 
     const onSubmit = (data) => {
         setLoading(true);
         const body = {
             ...data,
-            image: singlePost?.image,
+            image: singleBlog?.image,
         }
 
         axios.put(`http://127.0.0.1:8080/api/updatepost/${id}`, {...body}, {withCredentials: true})
@@ -154,7 +140,6 @@ function EditPost() {
                                 className='hidden'
                                 accept='image/*'
                                 visibility="hidden"
-                                onChange={handleImage}
                             />
                             <div className='flex flex-col'>
                                 <div className='pb-2'>Upload Image</div>
@@ -162,7 +147,7 @@ function EditPost() {
                                     <div className='pt-4'>
                                         <img 
                                             src={image ? image.image : singlePost?.image} 
-                                            alt="" 
+                                            alt="Default Image" 
                                             className='object-contain -mt-8 p-5 w-1/2'
                                         />
                                     </div>
@@ -170,7 +155,7 @@ function EditPost() {
                                     <div className='pt-4'>
                                         <img 
                                             src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRNaZWu6JFF7vxUdvIhvdG8RLQiMCI0RHUaitDRFpmj&s"
-                                            alt="" 
+                                            alt="Default Image" 
                                             style={{background: "#EFEFEF"}}
                                             className="h-full w-48"
                                         />

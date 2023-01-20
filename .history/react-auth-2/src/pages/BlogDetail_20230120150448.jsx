@@ -8,27 +8,27 @@ function BlogDetail() {
     const {id} = useParams();
     const navigate = useNavigate();
 
+    const singleBlog = () => {
+        axios.get(`http://127.0.0.1:8080/api/allpost/${id}`, {withCredentials: true})
+        .then(function(response) {
+            // handle access .....
+            setSinglePost(response?.data?.data);
+            console.log(response?.data?.data);
+        }).catch(function(error) {
+            // handle error
+            console.log(error);
+        }).then(function() {
+            //  always executed ....
+        });
+    };
+
     useEffect(() => {
-        const singleBlog = () => {
-            axios.get(`http://127.0.0.1:8080/api/allpost/${id}`, {withCredentials: true})
-            .then(function(response) {
-                // handle access .....
-                setSinglePost(response?.data?.data);
-                console.log(response?.data?.data);
-            }).catch(function(error) {
-                // handle error
-                console.log(error);
-            }).then(function() {
-                //  always executed ....
-            });
-        };
-    
         const User = localStorage.getItem("user");
         if(!User){
             navigate("/login")
         }
         singleBlog();
-    }, [navigate, id]);
+    }, [navigate, singleBlog]);
 
     return (
         <div className='relative'>
@@ -39,7 +39,7 @@ function BlogDetail() {
                 <img 
                     className='w-full h-96 my-4'
                     src={singlePost?.image} 
-                    alt="" 
+                    alt="Default Image" 
                 />
                 <p className='text-gray-700 text-base leading-8 max-w-2xl mx-auto'>
                     Author: {singlePost?.user?.first_name} {singlePost?.user?.last_name}
