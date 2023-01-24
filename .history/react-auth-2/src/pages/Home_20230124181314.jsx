@@ -9,9 +9,9 @@ function Home() {
   const [deleteLoading, setDeleteLoading] = useState(false);
   const navigate = useNavigate();
 
-  const allBlog = async () => {
+  const allBlog = () => {
     setLoading(true);
-    await axios.get(`http://127.0.0.1:8080/api/allpost`)
+    axios.get(`http://127.0.0.1:8080/api/allpost`)
     .then(function(response) {
         // handle access .....
         setLoading(false);
@@ -35,13 +35,13 @@ function Home() {
     allBlog();
   }, [navigate]);
 
-  const deleteBtn = async (blog) => {
+  const deleteBtn = (blog) => {
       setDeleteLoading(true);
-      await axios.delete(`http://127.0.0.1:8080/api/deletepost/${blog.id}`).then(function(response) {
+      axios.delete(`http://127.0.0.1:8080/api/deletepost/${blog.id}`).then(function(response) {
           // handle access .....
           setDeleteLoading(false);
           // openSnackbar(error?.response?.data?.message);
-          allBlog();
+          uniqueBlog();
       }).catch(function(error) {
           // handle error
           setDeleteLoading(false);
@@ -86,18 +86,8 @@ function Home() {
         </div>
       </div>
       <div className="container my-12 mx-auto px-4 md:px-12">
-        {!blogData.data && blogData.data?.length <= 0 && (
-            <div className="text-2xl font-bold text-center flex justify-center items-center pl-16 pt-24">
-                <h1>You don't have post any yet. Kindly create a post</h1>
-            </div>
-        )}
-        {loading && (
-            <div className="text-2xl font-bold text-center px-56 pt-24">
-                <h1>Loading....</h1>
-            </div>
-        )}
         <div className="flex flex-wrap -mx-1 lg:mx-4">
-            {blogData.data?.map((blog) => (
+            {blogData?.map((blog) => (
                 <div className="my-1 px-1 w-full md:w-1/2 lg:my-4 lg:px-4 lg:w-1/3">
                     <article className="overflow-hidden rounded-lg shadow-lg">
                         <Link to={`/allpost/${blog.id}`}>
@@ -140,7 +130,7 @@ function Home() {
                 </div>
             ))}
         </div>
-      </div>
+    </div>
     </>
     
   )

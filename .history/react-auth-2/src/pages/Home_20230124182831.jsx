@@ -86,16 +86,6 @@ function Home() {
         </div>
       </div>
       <div className="container my-12 mx-auto px-4 md:px-12">
-        {!blogData.data && blogData.data?.length <= 0 && (
-            <div className="text-2xl font-bold text-center flex justify-center items-center pl-16 pt-24">
-                <h1>You don't have post any yet. Kindly create a post</h1>
-            </div>
-        )}
-        {loading && (
-            <div className="text-2xl font-bold text-center px-56 pt-24">
-                <h1>Loading....</h1>
-            </div>
-        )}
         <div className="flex flex-wrap -mx-1 lg:mx-4">
             {blogData.data?.map((blog) => (
                 <div className="my-1 px-1 w-full md:w-1/2 lg:my-4 lg:px-4 lg:w-1/3">

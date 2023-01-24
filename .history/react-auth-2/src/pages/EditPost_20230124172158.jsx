@@ -1,32 +1,23 @@
-import React, {useEffect, useState} from "react";
+import React, {useState, useEffect} from 'react';
 import {useForm} from 'react-hook-form'
 import axios from 'axios'
 // import {useSnackbar} from 'react-simple-snackbar'
-import { useNavigate } from 'react-router-dom'
+import { useParams, useNavigate } from 'react-router-dom'
 
-export default function CreateBlog () {
-    const [image, setImage] = useState();
+function EditPost() {
+    const [singlePost, setSinglePost] = useState();
     const [loading, setLoading] = useState(false);
-    const [imageData, setImageData] = useState();
     const [imageUpload, setImageUpload] = useState();
-    const [userData, setUserData] = useState();
     const [loadingData, setLoadingData] = useState();
+    const {id} = useParams();
     const navigate = useNavigate();
+    const [image, setImage] = useState();
     const {
         register,
         handleSubmit,
         // watch,
         formState: {errors},
     } = useForm();
-
-    useEffect(() => {
-        const User = localStorage.getItem("user");
-        const parseUser = JSON.parse(User);
-        setUserData(parseUser);
-        if (!User){
-            navigate("/login")
-        }
-    }, [navigate]);
 
     /* const options = {
         position: "bottom-right",
@@ -45,36 +36,31 @@ export default function CreateBlog () {
     }; */
     // const [openSnackbar] = useSnackbar(options);
 
-    const onSubmit = (data) => {
-        setLoading(true);
-        const body = {
-            ...data,
-            image: imageData,
-            userid: JSON.stringify(userData.id),
-            // phone: parseInt(data.phone),
-        }
 
-        console.log(body)
-        // console.log(body);
-        // return
-        axios.post(`http://localhost:8080/api/createpost`, body)
-        .then(function(response) {
-            // handle access .....
-            setLoading(false);
-            navigate("/personal_posts");
-        }).catch(function(error) {
-            // handle error
-            setLoading(false);
-        }).then(function() {
-            //  always executed ....
-        });
-    };
+    useEffect(() => {
+        const singleBlog = () => {
+            axios.get(`http://127.0.0.1:8080/api/allpost/${id}`, {withCredentials: true})
+            .then(function(response) {
+                // handle access .....
+                setSinglePost(response?.data?.data);
+                console.log(response?.data?.data);
+            }).catch(function(error) {
+                // handle error
+                console.log(error);
+            }).then(function() {
+                //  always executed ....
+            });
+        };
+        const User = localStorage.getItem("user");
+        if(!User){
+            navigate("/login")
+        }
+        singleBlog();
+    }, [navigate, id]);
 
     const handleImage = (e) => {
         const file = e.target.files[0];
         // const size = file.size / 1024;
-        setImageUpload(file);
-
         // data.append("image", file)
         const reader = new FileReader();
         reader.onloadend = function() {
@@ -86,10 +72,31 @@ export default function CreateBlog () {
         }
     };
 
+    const onSubmit = (data) => {
+        setLoading(true);
+        const body = {
+            ...data,
+            image: singlePost ? singlePost?.image : imageUpload,
+        }
+
+        axios.put(`http://127.0.0.1:8080/api/updatepost/${id}`, {...body})
+        .then(function(response) {
+            // handle access .....
+            // openSnackbar("Post Updated Successfully .. !");
+            setLoading(false);
+            navigate("/personal_posts");
+        }).catch(function(error) {
+            // handle error
+            // openSnackbar("Post Not Updated");
+            setLoading(false);
+            console.log(error);
+        });
+    }
+
     const uploadImage = () => {
         let formData = new FormData(); // formData object
-        formData.append("image", imageUpload); // append the value with key, value pair
-        formData.append("name", imageUpload.name);
+        formData.append("image", singlePost ? singlePost?.image : imageUpload); // append the value with key, value pair
+        formData.append("name", singlePost ? singlePost?.image.name : imageUpload.name);
         const config = {
             headers: {"Content-Type":"multipart/form-data"},
             withCredentials: true,
@@ -98,7 +105,7 @@ export default function CreateBlog () {
         axios.post(url, formData, config)
         .then((response) => {
             setLoadingData(false);
-            setImageData(response?.data?.url);
+            setImageUpload(response?.data?.url);
             // openSnackbar("Image Uploaded Successfully");
         })
         .catch((error) => {
@@ -112,7 +119,7 @@ export default function CreateBlog () {
             <div className="max-w-screen-md mx-auto p-5">
                 <div className="text-center mb-16">
                     <p className="mt-4 text-sm leading-7 text-gray-500 font-regular uppercase">
-                        Create your Post
+                        Edit your Post
                     </p>
                     <h3 className="text-3xl sm:text-4xl leading-normal font-extrabold tracking-right text-gray-900">
                         Express your <span className="text-indigo-600">Feeling</span>
@@ -141,9 +148,9 @@ export default function CreateBlog () {
                         )}
                     </div>
                 </div>
-                <div className='flex flex-wrap -mx-3 mb-6'>
-                    <div className='w-full md:w-full px-3 mb-6 md:mb-0'>
-                        <label title='click to select a picture'>
+                <div>
+                    <div>
+                    <label title='click to select a picture'>
                             <input type="file" name="image" id="banner" 
                                 className='hidden'
                                 accept='image/*'
@@ -155,7 +162,7 @@ export default function CreateBlog () {
                                 {image ? (
                                     <div className='pt-4'>
                                         <img 
-                                            src={image ? image.image : ""} 
+                                            src={image.image} 
                                             alt="" 
                                             className='object-contain -mt-8 p-5 w-1/2'
                                         />
@@ -163,10 +170,11 @@ export default function CreateBlog () {
                                 ) : (
                                     <div className='pt-4'>
                                         <img 
-                                            src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRNaZWu6JFF7vxUdvIhvdG8RLQiMCI0RHUaitDRFpmj&s"
+                                            src={axios.get(`http://127.0.0.1:8080/api/uploads/${singlePost?.image}`).then((response) => {
+                                                console.log(response)
+                                            })}
                                             alt="" 
-                                            style={{background: "#EFEFEF"}}
-                                            className="h-full w-48"
+                                            className='object-contain -mt-8 p-5 w-1/2'
                                         />
                                     </div>
                                 )}
@@ -210,7 +218,7 @@ export default function CreateBlog () {
                             className="shadow text-white px-8 py-3 border border-transparent rounded bg-indigo-600 hover:bg-indigo-400 focus:shadow-outline focus:outline-none"
                             disabled={loading ? true : false}
                         >
-                            {loading ? "Loading ...":"Create Post"}
+                            {loading ? "Loading ...":"Update Post"}
                         </button>
                     </div>
                 </div>
@@ -218,3 +226,5 @@ export default function CreateBlog () {
         </div>
     )
 }
+
+export default EditPost

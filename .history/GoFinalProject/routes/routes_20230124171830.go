@@ -23,7 +23,7 @@ func Setup(app *fiber.App) {
 
 	// Image upload route for practice ..................
 	app.Post("/api/upload-image", controllers.Upload)
-	app.Static("/api/upload", "./uploads")
+	app.Static("/api/updoads/:name", "./uploads")
 
 	// User and logout routes ..............
 	app.Get("/api/user", controllers.User)
