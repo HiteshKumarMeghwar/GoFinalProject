@@ -14,10 +14,9 @@ function Nav() {
     // myHeaders.append("Cookie", "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiIxNiJ9.XLdKkHtF1CK-mhldeU4xD_1I7le-VLlVoUVYmS-TSZs")
     // await axios.post(`http://127.0.0.1:8080/api/logout`, {mode:"no-cors", method:"POST", headers: myHeaders})
     await axios.post(`http://127.0.0.1:8080/api/logout`, 
-    {withCredentials: true
+    {withCredentials: true, headers: {Authorization: localStorage.getItem("token")}
   }).then(function(response) {
         // handle access .....
-        localStorage.removeItem("token")
         localStorage.removeItem("user")
         navigate("/login");
     }).catch(function(error) {

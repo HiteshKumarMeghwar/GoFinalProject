@@ -71,6 +71,7 @@ func UpdatePost(c *fiber.Ctx) error {
 }
 
 func UniquePost(c *fiber.Ctx) error {
+	cookie := c.Cookies("jwt")
 
 	payload := struct {
 		Id string `json:"id"`

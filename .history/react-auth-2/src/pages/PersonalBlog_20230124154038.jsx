@@ -29,11 +29,14 @@ export default function PersonalBlog() {
     const uniqueBlog = () => {
         setLoading(true);
         let user = localStorage.getItem("user")
-        user = JSON.parse(user);
+        let id = user ? user.id : null ;
+       
         let body = {
-            id : JSON.stringify(user.id),
+            id : id
         }
+        console.log(body)
         axios.post(`http://127.0.0.1:8080/api/uniquepost`,body
+       
         ).then(function(response) {
             // handle access .....
             setLoading(false);
@@ -57,7 +60,8 @@ export default function PersonalBlog() {
 
     const deleteBtn = (blog) => {
         setDeleteLoading(true);
-        axios.delete(`http://127.0.0.1:8080/api/deletepost/${blog.id}`).then(function(response) {
+        axios.delete(`http://127.0.0.1:8080/api/deletepost/${blog.id}`, 
+        {withCredentials: true}).then(function(response) {
             // handle access .....
             setDeleteLoading(false);
             // openSnackbar(error?.response?.data?.message);

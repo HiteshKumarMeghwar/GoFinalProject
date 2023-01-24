@@ -49,17 +49,13 @@ export default function CreateBlog () {
         setLoading(true);
         const body = {
             ...data,
-            image: imageData,
-            userid: JSON.stringify(userData.id),
+            // image: imageData,
+            // user_id: userData.id,
             // phone: parseInt(data.phone),
         }
-      
-
-
-        console.log(body)
         // console.log(body);
         // return
-        axios.post(`http://localhost:8080/api/createpost`, body)
+        axios.post(`http://127.0.0.1:8080/api/createpost`, { ...body}, {withCredentials: true})
         .then(function(response) {
             // handle access .....
             setLoading(false);

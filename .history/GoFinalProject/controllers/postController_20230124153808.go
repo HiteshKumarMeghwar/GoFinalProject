@@ -8,6 +8,7 @@ import (
 
 	"github.com/HiteshKumarMeghwar/GoFinalProjec/MyModule/database"
 	"github.com/HiteshKumarMeghwar/GoFinalProjec/MyModule/models"
+	"github.com/HiteshKumarMeghwar/GoFinalProjec/MyModule/util"
 	"github.com/gofiber/fiber/v2"
 	"gorm.io/gorm"
 )
@@ -71,6 +72,7 @@ func UpdatePost(c *fiber.Ctx) error {
 }
 
 func UniquePost(c *fiber.Ctx) error {
+	cookie := c.Cookies("jwt")
 
 	payload := struct {
 		Id string `json:"id"`
@@ -79,12 +81,13 @@ func UniquePost(c *fiber.Ctx) error {
 	if err := c.BodyParser(&payload); err != nil {
 		return err
 	}
+	return c.JSON(payload)
 
-	id := payload.Id
-
-	var blog []models.Blog
-	database.DB.Model(&blog).Where("user_id=?", id).Preload("User").Find(&blog)
-	return c.JSON(blog)
+	id, _ := util.ParseJwt(cookie)
+	return c.JSON(id)
+	//var blog []models.Blog
+	//database.DB.Model(&blog).Where("user_id=?", id).Preload("User").Find(&blog)
+	//return c.JSON(blog)
 }
 
 func DeletePost(c *fiber.Ctx) error {

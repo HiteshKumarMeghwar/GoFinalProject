@@ -17,7 +17,6 @@ function Nav() {
     {withCredentials: true
   }).then(function(response) {
         // handle access .....
-        localStorage.removeItem("token")
         localStorage.removeItem("user")
         navigate("/login");
     }).catch(function(error) {

@@ -50,12 +50,9 @@ export default function CreateBlog () {
         const body = {
             ...data,
             image: imageData,
-            userid: JSON.stringify(userData.id),
+            userid: userData.id,
             // phone: parseInt(data.phone),
         }
-      
-
-
         console.log(body)
         // console.log(body);
         // return

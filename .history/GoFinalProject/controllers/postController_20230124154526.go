@@ -71,6 +71,7 @@ func UpdatePost(c *fiber.Ctx) error {
 }
 
 func UniquePost(c *fiber.Ctx) error {
+	cookie := c.Cookies("jwt")
 
 	payload := struct {
 		Id string `json:"id"`
@@ -80,7 +81,7 @@ func UniquePost(c *fiber.Ctx) error {
 		return err
 	}
 
-	id := payload.Id
+	id = payload.Id
 
 	var blog []models.Blog
 	database.DB.Model(&blog).Where("user_id=?", id).Preload("User").Find(&blog)
