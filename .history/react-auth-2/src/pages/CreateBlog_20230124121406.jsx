@@ -173,7 +173,7 @@ export default function CreateBlog () {
                     </div>
                     <div className="flex items-center justify-center px-5">
                         <button
-                            className="shadow text-white px-8 py-3 border border-transparent rounded bg-indigo-600 hover:bg-indigo-400 focus:shadow-outline focus:outline-none"
+                            className="shadow px-8 py-3 border border-transparent rounded bg-indigo-600 hover:bg-indigo-400 focus:shadow-outline focus:outline-none"
                             onClick={uploadImage}
                             disabled={loadingData ? true : false}
                         >
@@ -205,7 +205,7 @@ export default function CreateBlog () {
                 <div className='flex flex-wrap -mx-3 mb-6'>
                     <div className="flex items-center justify-center px-5">
                         <button
-                            className="shadow text-white px-8 py-3 border border-transparent rounded bg-indigo-600 hover:bg-indigo-400 focus:shadow-outline focus:outline-none"
+                            className="shadow bg-indigo-600 hover:bg-indigo-400 focus:shadow-outline focus:outline-none"
                             disabled={loading ? true : false}
                         >
                             {loading ? "Loading ...":"Create Post"}

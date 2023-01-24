@@ -7,15 +7,11 @@ function Nav() {
   const [userData, setUserData] = useState();
   const navigate = useNavigate();
 
-  const logOut = async () => {
-    // let myHeaders = new Headers();
-    // myHeaders.append("Access-Control-Allow-Origin","http://localhost:3000");
-    // myHeaders.append("Access-Control-Allow-Credentials", "true");
-    // myHeaders.append("Cookie", "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiIxNiJ9.XLdKkHtF1CK-mhldeU4xD_1I7le-VLlVoUVYmS-TSZs")
-    // await axios.post(`http://127.0.0.1:8080/api/logout`, {mode:"no-cors", method:"POST", headers: myHeaders})
-    await axios.post(`http://127.0.0.1:8080/api/logout`, 
-    {withCredentials: true, headers: {Authorization: localStorage.getItem("token")}
-  }).then(function(response) {
+  const logOut = () => {
+    axios.post(`http://127.0.0.1:8080/api/logout`, {withCredentials: true, headers: {
+      Authorization: 'Bearer {token}',
+    }})
+    .then(function(response) {
         // handle access .....
         localStorage.removeItem("user")
         navigate("/login");

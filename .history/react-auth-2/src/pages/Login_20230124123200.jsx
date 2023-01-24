@@ -51,7 +51,7 @@ export default function Login() {
         // handle access .....
         setLoading(false);
         setMessage(response?.data?.message);
-        localStorage.setItem("token", JSON.stringify(response?.data?.token))
+        localStorage.setItem("token", JSON.stringify(response?.data?.cookie))
         localStorage.setItem("user", JSON.stringify(response?.data?.user));
         navigate("/");
         // console.log(response?.data?.message);
